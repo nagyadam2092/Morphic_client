@@ -1,0 +1,27 @@
+<html>
+	<header>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+		<script src="../js/RobotActions.js"></script>
+		<script src="../js/Robot.js"></script>
+		<style>
+			#robotIframe{
+				top: 0px;
+				left: 0px;
+			}
+		</style>
+	</header>
+	<body>
+		<iframe id="robotIframe" src="test.html" width="600" height="300"></iframe>
+		<br/>
+		<textarea id="testTextInput" cols="150" rows="4">[{"action":"pressAt","x":20,"y":240},{"action":"type","text":"This is a text."},{"action":"mouseMove","x":500,"y":500},{"action":"mouseMove","x":600,"y":500},{"action":"mouseMove","x":800,"y":0},{"action":"mouseMove","x":0,"y":0},{"action":"dragDrop","x1":150,"y1":250,"x2":150,"y2":150}]</textarea>
+		<br/>
+		<button id="simpleTestButton">
+			Start simple test!
+		</button>
+		<br/>
+		<p>
+			[{"action":"pressAt","x":20,"y":240},{"action":"type","text":"This is a text."},{"action":"mouseMove","x":500,"y":500},{"action":"mouseMove","x":600,"y":500},{"action":"mouseMove","x":800,"y":0},{"action":"mouseMove","x":0,"y":0},{"action":"dragDrop","x1":150,"y1":250,"x2":150,"y2":150}]
+		</p>
+
+	</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Morphic BPMN!</title>
+    <style type="text/css" href="../css/style.css"></style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/morphic.js"></script>
+    <script type="text/javascript" src="../js/bpmn.js"></script>
+    <script type="text/javascript" src="../js/serialization.js"></script>
+    <script type="text/javascript" src="../js/Robot.js"></script>
+    <script type="text/javascript" src="../js/Morphic_robot_extensions.js"></script>
+</head>
+
+<body>
+	<iframe id="testIFrame" width="100%" height="300px" src="test.html"></iframe>
+    <p>
+        Build your own test case:
+    </p>
+    <canvas id="world1" tabindex="1" width="1000px" height="400">
+        <p>
+            Your browser doesn't support canvas.
+        </p>
+    </canvas>
+    <div>
+        <button id="simpleTest">Create simple test case!</button><button id="deserializeButton" onclick="BPMModule.BPMDeserialization()">DESERIALIZE!</button>
+    </div>
+    <div id="console"></div>
+</body>
+
+</html>
