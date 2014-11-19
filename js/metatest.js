@@ -42,14 +42,14 @@ $(document).ready(function() {
 						//console.log(accArray);
 					}
 				});
-				$(document).keyup(function(event) {
+				$(document).keypress(function(event) {
 					//érdekesség: ha karakterenként veszem be az értékeket, összecsúsznak a karakterek a kliens-szerver közti kommunikációs idők miatt.
 					if (accArray.length > 1 && accArray[accArray.length - 1].type == "type") {
-						accArray[accArray.length - 1].character += String.fromCharCode(event.keyCode);
+						accArray[accArray.length - 1].text += String.fromCharCode(event.keyCode);
 					} else {
 						var type = {};
 						type.type = "type";
-						type.character = String.fromCharCode(event.keyCode);
+						type.text = String.fromCharCode(event.keyCode);
 						accArray.push(type);
 					}
 				});
@@ -92,7 +92,7 @@ $(document).ready(function() {
 								recCall(arr);
 							});
 						} else if (elem.type == "type") {
-							$.post(Robot.urlPrefix + 'type=' + elem.character, function(response) {
+							$.post(Robot.urlPrefix + 'type=' + escape(elem.text), function(response) {
 								console.log(response);
 								arr.shift();
 								recCall(arr);
