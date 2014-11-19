@@ -130,7 +130,7 @@ BPM_AnchorMorph.prototype.justDropped = function () {
 	
 	//ADAM
 	//ITT KELL MAJD KÉSŐBB BEÁLLÍTANI ÚJABB ELEMEKET!
-	//ADAM TypeMorph
+	//ADAM
 	
     if (!(this.parent instanceof BPM_TaskMorph ||
             this.parent instanceof BPM_EventMorph ||
@@ -138,7 +138,8 @@ BPM_AnchorMorph.prototype.justDropped = function () {
             this.parent instanceof MouseMoveMorph ||
             this.parent instanceof PressAtMorph ||
             this.parent instanceof TypeMorph ||
-            this.parent instanceof DragDropMorph)) {
+            this.parent instanceof DragDropMorph ||
+            this.parent instanceof RobotGateWayMorph)) {
         this.flow.source.disconnectOutbound();
         this.flow.target = null;
         this.flow.destroy();
@@ -522,6 +523,7 @@ BPM_TaskMorph.prototype.reactToDropOf = function (aMorph) {
     aMorph.destroy();
 };
 
+/*
 BPM_TaskMorph.prototype.prepareToBeGrabbed = function () {
     if (this.outbound) {
         this.outbound.startStepping();
@@ -550,6 +552,56 @@ BPM_TaskMorph.prototype.justDropped = function () {
     this.outputs.forEach(function (flow) {
         flow.stopStepping();
     });
+};
+*/
+
+//NEW from ADAM
+//FOR arbor.js
+//if I define it "simply" here, without the $(document).ready, 
+//it will not overdefine the original
+//prepareToBeGrabbed & justDropped functions
+//
+BPM_TaskMorph.prototype.prepareToBeGrabbed = function(handMorph) {
+	if (handMorph && handMorph.morphToGrab && handMorph.morphToGrab.graphNode)
+		handMorph.morphToGrab.graphNode.underDragging = true;
+
+	//original
+	if (this.outbound) {
+		this.outbound.startStepping();
+	}
+	this.inbound.forEach(function(flow) {
+		flow.startStepping();
+	});
+	this.inputs.forEach(function(flow) {
+		flow.startStepping();
+	});
+	this.outputs.forEach(function(flow) {
+		flow.startStepping();
+	});
+};
+
+BPM_TaskMorph.prototype.justDropped = function(handMorph) {
+	if (handMorph && handMorph.morphToGrab && handMorph.morphToGrab.graphNode) {
+		handMorph.morphToGrab.graphNode.underDragging = false;
+		var morphPointGrabbed = RendererClass.sys.fromScreen(new Point(handMorph.bounds.origin.x, handMorph.bounds.origin.y));
+		//transforms to coordinates
+		handMorph.morphToGrab.graphNode.p.x = morphPointGrabbed.x;
+		handMorph.morphToGrab.graphNode.p.y = morphPointGrabbed.y;
+	}
+
+	//original
+	if (this.outbound) {
+		this.outbound.stopStepping();
+	}
+	this.inbound.forEach(function(flow) {
+		flow.stopStepping();
+	});
+	this.inputs.forEach(function(flow) {
+		flow.stopStepping();
+	});
+	this.outputs.forEach(function(flow) {
+		flow.stopStepping();
+	});
 };
 
 // drawing
@@ -987,6 +1039,8 @@ BPM_EventMorph.prototype.userMenu = function () {
         	menu.addItem('next mouse move at', 'addMouseMoveAt');
         	menu.addItem('next mouse move', 'addMouseMove');
         	menu.addItem('next type', 'addType');
+			menu.addItem('next drag drop', 'addDragDrop');
+			menu.addItem('next robot gateway', 'addRobotGateway');
         	menu.addLine();
         	//ADAM
             menu.addItem('connect...', 'connect');
@@ -1077,7 +1131,9 @@ BPM_EventMorph.prototype.wantsDropOf = function (aMorph) {
 BPM_EventMorph.prototype.reactToDropOf
     = BPM_TaskMorph.prototype.reactToDropOf;
 
-BPM_EventMorph.prototype.prepareToBeGrabbed = function () {
+BPM_EventMorph.prototype.prepareToBeGrabbed = function (handMorph) {
+	if (handMorph && handMorph.morphToGrab && handMorph.morphToGrab.graphNode)
+		handMorph.morphToGrab.graphNode.underDragging = true;
     if (this.outbound) {
         this.outbound.startStepping();
     }
@@ -1086,7 +1142,14 @@ BPM_EventMorph.prototype.prepareToBeGrabbed = function () {
     });
 };
 
-BPM_EventMorph.prototype.justDropped = function () {
+BPM_EventMorph.prototype.justDropped = function (handMorph) {
+	if (handMorph && handMorph.morphToGrab && handMorph.morphToGrab.graphNode) {
+		handMorph.morphToGrab.graphNode.underDragging = false;
+		var morphPointGrabbed = RendererClass.sys.fromScreen(new Point(handMorph.bounds.origin.x, handMorph.bounds.origin.y));
+		//transforms to coordinates
+		handMorph.morphToGrab.graphNode.p.x = morphPointGrabbed.x;
+		handMorph.morphToGrab.graphNode.p.y = morphPointGrabbed.y;
+	}	
     if (this.outbound) {
         this.outbound.stopStepping();
     }

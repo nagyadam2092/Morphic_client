@@ -1,32 +1,64 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-    <meta charset="UTF-8">
-    <title>Morphic BPMN!</title>
-    <style type="text/css" href="../css/style.css"></style>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
-    <script type="text/javascript" src="../js/morphic.js"></script>
-    <script type="text/javascript" src="../js/bpmn.js"></script>
-    <script type="text/javascript" src="../js/serialization.js"></script>
-    <script type="text/javascript" src="../js/Robot.js"></script>
-    <script type="text/javascript" src="../js/Morphic_robot_extensions.js"></script>
-</head>
+	<head>
+		<meta charset="UTF-8">
+		<title>Morphic BPMN!</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/morphic.js"></script>
+		<script type="text/javascript" src="../js/bpmn.js"></script>
+		<script type="text/javascript" src="../js/serialization.js"></script>
+		<script type="text/javascript" src="../js/Robot.js"></script>
+		<script type="text/javascript" src="../js/Morphic_robot_extensions.js"></script>
+		<script type="text/javascript" src="../js/arbor/arbor.js"></script>
+		<script type="text/javascript" src="../js/arbor/main.js"></script>
+		<script type="text/javascript" src="../js/metatest.js"></script>
+		<link rel="stylesheet" type="text/css" href="../css/style.css">
+		</link>
+	</head>
 
-<body>
-	<iframe id="testIFrame" width="100%" height="300px" src="test.html"></iframe>
-    <p>
-        Build your own test case:
-    </p>
-    <canvas id="world1" tabindex="1" width="1000px" height="400">
-        <p>
-            Your browser doesn't support canvas.
-        </p>
-    </canvas>
-    <div>
-        <button id="simpleTest">Create simple test case!</button><button id="deserializeButton" onclick="BPMModule.BPMDeserialization()">DESERIALIZE!</button>
-    </div>
-    <div id="console"></div>
-</body>
+	<body>
+		<iframe id="testIFrame" width="100%" height="300px" src="test.html"></iframe>
+		<button id="metaButton">Turn on/off click recording</button>
+		<input id="metaTestNameSave" type="text" placeholder="SAVING NAME"/>
+		<input id="metaTestNameLoad" type="text" placeholder="LOADING NAME"/>
+		<button id="metaStartButton">Start recorded test with the name of the previous input!</button>
+		<p class="featured testcase">
+			Build your own test case:
+		</p>
+		<canvas id="world1" tabindex="1" width="1000px" height="600px">
+			<p>
+				Your browser doesn't support canvas.
+			</p>
+		</canvas>
+		<div>
+			<button id="startTestBtn" class="btn">
+				START TEST
+			</button>
+		</div>
+		<div class="changepage">
+			<p class="featured">
+				Change the page you want for testing.
+				<input type="text" id="iFrameChangeSrcInput" placeholder="www.example.com" class="mac"/>
+				<button id="iFrameChangeSrcBtn" class="btn">
+					Change page!
+				</button>
+			</p>
+		</div>
+		<div id="console"></div>
+		<p class="featured">
+			Deserialize from text!
+		</p>
+		<textarea id="deserializeTextArea" style="width:1000px; height:300px;" class="mac">[{"id":"Nf73f69b","serializationType":"MouseMoveMorph","label.text":"mouseMove\nx: 0\ny: 0","bounds.origin.x":473,"bounds.origin.y":459,"y":0,"x":0,"RGMArray":[{"RGMID":"Cfd2a497","RGMIsTrue":true},{"RGMID":"Gf1f775d","RGMIsTrue":false}]},{"id":"L2fd19c3","serializationType":"MouseMoveAtMorph","label.text":"mouseMoveAt\nCSS: #theButton","bounds.origin.x":268,"bounds.origin.y":465,"css":"#theButton","RGMArray":[{"RGMID":"Cfd2a497","RGMIsTrue":true},{"RGMID":"Gf1f775d","RGMIsTrue":false}]},{"id":"T79b8bae","serializationType":"BPM_EventMorph","type":"stop","bounds.origin.x":658,"bounds.origin.y":475,"RGMArray":[{"RGMID":"Cfd2a497","RGMIsTrue":true},{"RGMID":"Gf1f775d","RGMIsTrue":false}]},{"id":"E280695f","serializationType":"BPM_EventMorph","type":"start","bounds.origin.x":50,"bounds.origin.y":50},{"id":"Bb4045e9","serializationType":"PressAtMorph","bounds.origin.x":111,"bounds.origin.y":42,"css":"#theInput"},{"id":"Bf500b77","serializationType":"TypeMorph","label.text":"type: valami erdekes yes","bounds.origin.x":250,"bounds.origin.y":47,"text":"valami erdekes yes"},{"id":"Cfd2a497","serializationType":"RobotGateWayMorph","label.text":"$(\"#theInput\").val() == \"valami erdekes yes\"","bounds.origin.x":426,"bounds.origin.y":33},{"id":"Pe10a849","serializationType":"PressAtMorph","bounds.origin.x":61,"bounds.origin.y":260,"css":"#theButton","RGMArray":[{"RGMID":"Cfd2a497","RGMIsTrue":true}]},{"id":"Xd136a99","serializationType":"BPM_EventMorph","type":"stop","bounds.origin.x":864,"bounds.origin.y":107,"RGMArray":[{"RGMID":"Cfd2a497","RGMIsTrue":false}]},{"id":"Gf1f775d","serializationType":"RobotGateWayMorph","RGMArray":[{"RGMID":"Cfd2a497","RGMIsTrue":true}],"label.text":"1 > 3","bounds.origin.x":335,"bounds.origin.y":335},{"id":"J60a5c6e","serializationType":"DragDropMorph","bounds.origin.x":60,"bounds.origin.y":451,"from":"#drag1","to":"#div1","RGMArray":[{"RGMID":"Cfd2a497","RGMIsTrue":true},{"RGMID":"Gf1f775d","RGMIsTrue":false}]},{"id":"S8c4d7d2","serializationType":"BPM_EventMorph","type":"stop","bounds.origin.x":489,"bounds.origin.y":340,"RGMArray":[{"RGMID":"Cfd2a497","RGMIsTrue":true},{"RGMID":"Gf1f775d","RGMIsTrue":true}]},{"id":"Oae552af","serializationType":"BPM_SequenceFlowMorph","source":"E280695f","target":"Bb4045e9"},{"id":"Ga83851b","serializationType":"BPM_SequenceFlowMorph","source":"Bb4045e9","target":"Bf500b77"},{"id":"X6611658","serializationType":"BPM_SequenceFlowMorph","source":"Bf500b77","target":"Cfd2a497"},{"id":"G53e1949","serializationType":"BPM_SequenceFlowMorph","source":"Cfd2a497","target":"Pe10a849","RGMArray":[{"RGMID":"Cfd2a497","RGMIsTrue":true}],"isFork":false},{"id":"C61aaa5b","serializationType":"BPM_SequenceFlowMorph","source":"Cfd2a497","target":"Xd136a99","RGMArray":[{"RGMID":"Cfd2a497","RGMIsTrue":false}],"isFork":true},{"id":"Re4f7817","serializationType":"BPM_SequenceFlowMorph","source":"Pe10a849","target":"Gf1f775d","RGMArray":[{"RGMID":"Cfd2a497","RGMIsTrue":true}]},{"id":"T2a568f7","serializationType":"BPM_SequenceFlowMorph","source":"Gf1f775d","target":"J60a5c6e","RGMArray":[{"RGMID":"Cfd2a497","RGMIsTrue":true},{"RGMID":"Gf1f775d","RGMIsTrue":false}],"isFork":true},{"id":"Uc17012a","serializationType":"BPM_SequenceFlowMorph","source":"Gf1f775d","target":"S8c4d7d2","RGMArray":[{"RGMID":"Cfd2a497","RGMIsTrue":true},{"RGMID":"Gf1f775d","RGMIsTrue":true}],"isFork":false},{"id":"H7981d35","serializationType":"BPM_SequenceFlowMorph","source":"J60a5c6e","target":"L2fd19c3","RGMArray":[{"RGMID":"Cfd2a497","RGMIsTrue":true},{"RGMID":"Gf1f775d","RGMIsTrue":false}]},{"id":"V61bbe65","serializationType":"BPM_SequenceFlowMorph","source":"L2fd19c3","target":"Nf73f69b","RGMArray":[{"RGMID":"Cfd2a497","RGMIsTrue":true},{"RGMID":"Gf1f775d","RGMIsTrue":false}]},{"id":"Xf398ddf","serializationType":"BPM_SequenceFlowMorph","source":"Nf73f69b","target":"T79b8bae","RGMArray":[{"RGMID":"Cfd2a497","RGMIsTrue":true},{"RGMID":"Gf1f775d","RGMIsTrue":false}]}]
+    </textarea>
+		<div>
+			<button id="deserializeButton" class="btn">
+				Deserialize!
+			</button><br />
+			Automated positioning with Arbor.js!
+			<input type="checkbox" id="arborChbox" />
+		</div>
+		<p>Copyright © <a href="mailto:nagyadam2092@gmail.com">Adam Nagy</a></p>
+	</body>
 
 </html>
