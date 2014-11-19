@@ -6,7 +6,7 @@ $(document).ready(function() {
 		$("#metaButton").click(function() {
 			if (isOn) {
 				isOn = false;
-				$("#metaButton").css("border-color", "#ffffff");
+				$("#metaButton").css("color", "#000000");
 				$(document).unbind("mousemove");
 				$(document).unbind("click");
 				$(document).unbind("keyup");
@@ -14,10 +14,13 @@ $(document).ready(function() {
 				localStorage.setItem(saveTo, JSON.stringify(accArray));
 			} else {
 				isOn = true;
-				$("#metaButton").css("border-color", "#ff0000");
+				$("#metaButton").css("color", "#ff0000");
 				$(document).mousemove(function(event) {
 					var mouseMove = {};
-					if (accArray.length > 0 && accArray[accArray.length - 1].type == "mouseMove") {
+					//INTERESTING 2000 characters max approx for URL String
+					//approx one element is 20 characters
+					//2000 / 20 = 100
+					if (accArray.length > 0 && accArray[accArray.length - 1].type == "mouseMove" && accArray[accArray.length - 1].moveArray.length < 100) {
 						accArray[accArray.length - 1].moveArray.push({
 							"x" : event.pageX,
 							"y" : event.pageY
