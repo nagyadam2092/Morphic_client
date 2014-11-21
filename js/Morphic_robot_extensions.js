@@ -829,6 +829,7 @@ RobotGateWayMorph.prototype.userMenu = function() {
 	var menu = new MenuMorph(this);
 	//menu.addLine();
 	menu.addItem('edit condition', 'editLabel');
+	menu.addItem('delete', 'destroy');
 	if (this.outbound && this.fork) {
 		//menu.addItem('you have everything','nop');
 	} else {
@@ -886,6 +887,26 @@ RobotGateWayMorph.prototype.editLabel = function() {
 	}
 	if (this.outbound)
 		this.outbound.fixLayout();
+};
+
+RobotGateWayMorph.prototype.destroy = function() {
+	if (this.fork) {
+		this.fork.target.inbound.length = 0;
+		this.fork.destroy();
+		delete this.fork;
+	}
+	if (this.outbound) {
+		this.outbound.target.inbound.length = 0;
+		this.outbound.destroy();
+		delete this.outbound;
+        this.disconnectOutbound();
+    }
+    this.inbound.forEach(function (flow) {
+        flow.source.disconnectOutbound();
+    });
+    this.disconnectInputs();
+    this.disconnectOutputs();
+    BPM_TaskMorph.uber.destroy.call(this);
 };
 
 RobotGateWayMorph.prototype.addPressAt = function() {
@@ -1056,11 +1077,11 @@ RobotGateWayMorph.prototype.addForkStopEvent = function() {
 	pressAt.setPosition(world.hand.position());
 	pressAt.pickUp(world);
 };
-
+/*
 RobotGateWayMorph.prototype.destroy = function() {
 	this.disconnectOutbound();
 	RobotGateWayMorph.uber.destroy.call(this);
-};
+};*/
 
 RobotGateWayMorph.prototype.connectFork = function() {
 	var world = this.world(), anchor = new BPM_AnchorMorph(), flow = new BPM_SequenceFlowMorph(this, anchor);
@@ -1161,7 +1182,7 @@ RobotGateWayMorph.prototype.justDropped = function(handMorph) {
 		//transforms to coordinates
 		handMorph.morphToGrab.graphNode.p.x = morphPointGrabbed.x;
 		handMorph.morphToGrab.graphNode.p.y = morphPointGrabbed.y;
-	}	
+	}
 	RobotGateWayMorph.uber.justDropped.call(this);
 	if (this.fork) {
 		this.fork.stopStepping();

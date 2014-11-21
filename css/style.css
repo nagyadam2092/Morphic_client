@@ -64,3 +64,14 @@
 	position: relative;
 	left: 300px;
 }
+
+#metaDiv {
+	/*NEM MEGY
+	position: absolute; !important
+	top: 0;
+	right: 0;
+	*/
+}
+#metaButton{
+	width: 100%;
+}

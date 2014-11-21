@@ -4,7 +4,8 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>Morphic BPMN!</title>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+		<script type="text/javascript" src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
 		<script type="text/javascript" src="../js/morphic.js"></script>
 		<script type="text/javascript" src="../js/bpmn.js"></script>
 		<script type="text/javascript" src="../js/serialization.js"></script>
@@ -13,20 +14,38 @@
 		<script type="text/javascript" src="../js/arbor/arbor.js"></script>
 		<script type="text/javascript" src="../js/arbor/main.js"></script>
 		<script type="text/javascript" src="../js/metatest.js"></script>
-		<link rel="stylesheet" type="text/css" href="../css/style.css">
+		<link rel="stylesheet" type="text/css" href="../css/style.css?id=814327497">
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
 		</link>
 	</head>
 
 	<body>
 		<iframe id="testIFrame" width="100%" height="300px" src="test.html"></iframe>
-		<button id="metaButton">Turn on/off click recording</button>
-		<input id="metaTestNameSave" type="text" placeholder="SAVING NAME"/>
-		<input id="metaTestNameLoad" type="text" placeholder="LOADING NAME"/>
-		<button id="metaStartButton">Start recorded test with the name of the previous input!</button>
+		<div id="metaDiv" style="position: absolute; top: 0; right: 0; background: #EEE; opacity:0.9;">
+			<p class="featured testcase">
+				MetaTest
+			</p>
+			<p>
+				<button id="metaButton" style="width: 100%;">
+					Turn on/off recording
+				</button>
+			</p>
+			<p>
+				<input id="metaTestNameSave" type="text" placeholder="SAVING NAME"/>
+			</p>
+			<p>
+				<input id="metaTestNameLoad" type="text" placeholder="LOADING NAME"/>
+			</p>
+			<p>
+				<button id="metaStartButton" style="width: 100%;">
+					Start recorded test!
+				</button>
+			</p>
+		</div>
 		<p class="featured testcase">
 			Build your own test case:
 		</p>
-		<canvas id="world1" tabindex="1" width="1000px" height="600px">
+		<canvas id="world1" width="1000px" height="600px" tabindex="0">
 			<p>
 				Your browser doesn't support canvas.
 			</p>
@@ -54,11 +73,19 @@
 		<div>
 			<button id="deserializeButton" class="btn">
 				Deserialize!
-			</button><br />
+			</button>
+			<br />
 			Automated positioning with Arbor.js!
 			<input type="checkbox" id="arborChbox" />
 		</div>
-		<p>Copyright © <a href="mailto:nagyadam2092@gmail.com">Adam Nagy</a></p>
+		<p>
+			Copyright © <a href="mailto:nagyadam2092@gmail.com">Adam Nagy</a>
+		</p>
+		<div id="dialog" title="Dialog Title">
+			<p>
+				Sample.
+			</p>
+		</div>
 	</body>
 
 </html>

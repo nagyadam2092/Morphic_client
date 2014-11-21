@@ -105,8 +105,26 @@ $(document).ready(function() {
 				}
 
 			} else {
-				alert("Coudn't find '" + $metaTestNameLoad + "' named localStorage element");
+				Robot.alert("Coudn't find '" + $metaTestNameLoad + "' named localStorage element");
 			}
 		});
 	}();
+	$("#metaDiv").draggable();
+	$("#dialog").dialog({
+		autoOpen : false,
+		modal : true,
+		show : {
+			effect : "highlight",
+			duration : 500
+		},
+		hide : {
+			effect : "higlight",
+			duration : 500
+		},
+		buttons : {
+			Ok : function() {
+				$(this).dialog("close");
+			}
+		}
+	});
 });

@@ -163,34 +163,41 @@ var Robot = (function() {
 		//to evaluate inside the iframe
 		//slice to get just the id (not the # too)
 		var iframeWindow = document.getElementById(Settings.iframeId.slice(1)).contentWindow;
-		if (iframeWindow.eval(RGMNextElem.condition)) {
-			for (var i = callbackArray.length; i >= 0; i -= 1) {
-				if (callbackArray[i] && callbackArray[i].RGMArray && callbackArray[i].RGMArray instanceof Array && callbackArray[i].RGMArray.length > 0) {
-					for (var j = callbackArray[i].RGMArray.length; j >= 0; j -= 1) {
-						//csak itt van kulonbseg
-						if (callbackArray && callbackArray[i] && callbackArray[i].RGMArray[j] && !callbackArray[i].RGMArray[j].RGMIsTrue && callbackArray[i].RGMArray[j].RGMID == RGMNextElem.id) {
-							callbackArray.splice(i, 1);
-							/*deleteElementFromArray(i);
-							i--;*/
-							//debugger;
+		try {
+			if (iframeWindow.eval(RGMNextElem.condition)) {
+				for (var i = callbackArray.length; i >= 0; i -= 1) {
+					if (callbackArray[i] && callbackArray[i].RGMArray && callbackArray[i].RGMArray instanceof Array && callbackArray[i].RGMArray.length > 0) {
+						for (var j = callbackArray[i].RGMArray.length; j >= 0; j -= 1) {
+							//csak itt van kulonbseg
+							if (callbackArray && callbackArray[i] && callbackArray[i].RGMArray[j] && !callbackArray[i].RGMArray[j].RGMIsTrue && callbackArray[i].RGMArray[j].RGMID == RGMNextElem.id) {
+								callbackArray.splice(i, 1);
+								/*deleteElementFromArray(i);
+								i--;*/
+								//debugger;
+							}
+						}
+					}
+				}
+			} else {
+				for (var i = callbackArray.length; i >= 0; i -= 1) {
+					if (callbackArray[i] && callbackArray[i].RGMArray && callbackArray[i].RGMArray instanceof Array && callbackArray[i].RGMArray.length > 0) {
+						for (var j = callbackArray[i].RGMArray.length; j >= 0; j -= 1) {
+							//csak itt van kulonbseg
+							if (callbackArray && callbackArray[i] && callbackArray[i].RGMArray[j] && callbackArray[i].RGMArray[j].RGMIsTrue && callbackArray[i].RGMArray[j].RGMID == RGMNextElem.id) {
+								callbackArray.splice(i, 1);
+								/*deleteElementFromArray(i);
+								i--;*/
+								//debugger;
+							}
 						}
 					}
 				}
 			}
-		} else {
-			for (var i = callbackArray.length; i >= 0; i -= 1) {
-				if (callbackArray[i] && callbackArray[i].RGMArray && callbackArray[i].RGMArray instanceof Array && callbackArray[i].RGMArray.length > 0) {
-					for (var j = callbackArray[i].RGMArray.length; j >= 0; j -= 1) {
-						//csak itt van kulonbseg
-						if (callbackArray && callbackArray[i] && callbackArray[i].RGMArray[j] && callbackArray[i].RGMArray[j].RGMIsTrue && callbackArray[i].RGMArray[j].RGMID == RGMNextElem.id) {
-							callbackArray.splice(i, 1);
-							/*deleteElementFromArray(i);
-							i--;*/
-							//debugger;
-						}
-					}
-				}
-			}
+		} catch (err) {
+			var errorObj = {};
+			errorObj.type = "evaluation";
+			errorObj.text = err.message;
+			errorArray.push(errorObj);
 		}
 		callbackArray.shift();
 		accCallbackArray = callbackArray;
@@ -219,7 +226,7 @@ var Robot = (function() {
 			//cross-browser incompatibility
 			if (error.name == "SecurityError" && error.code == 18) {
 				callbackArray.length = 0;
-				alert("Cross-browser incompatibility: the page you want to test doesn't allow to get information outside from the page itself!");
+				Robot.alert("Cross-browser incompatibility: the page you want to test doesn't allow to get information outside from the page itself!", "Error");
 			}
 		}
 		if (callbackArray.length === 0) {
@@ -256,16 +263,13 @@ var Robot = (function() {
 	}
 
 	function testEnded() {
-		var endString = "Test ended!";
-		console.log("Test ended!");
+		var endString = "Test ended!<br/>ERRORS:";
 		if (errorArray.length > 0) {
 			errorArray.map(function(errorObj) {
-				console.log(errorObj.text);
-				endString += "\n" + errorObj.text;
+				endString += "<br/>" + "Type: " + errorObj.type + ", message: " + errorObj.text;
 			});
-			console.log(errorArray);
 		}
-		alert(endString);
+		Robot.alert(endString, "Test ended");
 	}
 
 	function initializeRobot() {
@@ -309,7 +313,7 @@ var Robot = (function() {
 			//{"id":"Xfe37619","serializationType":"BPM_SequenceFlowMorph","source":"Sc7fdaa4","target":"F0a367c5"},
 			//{"id":"T735d2ce","serializationType":"BPM_SequenceFlowMorph","source":"F0a367c5","target":"Ncc236b6"},
 			//{"id":"C93e9fd2","serializationType":"BPM_SequenceFlowMorph","source":"Ncc236b6","target":"Y4a2adcc"}]
-			
+
 			console.log("SERIALIZEDSTRING: ");
 			console.log(serializedString);
 			serializedString = serializedString.replace("\n", "");
@@ -478,6 +482,14 @@ var Robot = (function() {
 		return instance;
 	}
 
+	function alert(text, title) {
+		if (title) {
+			$('#dialog').dialog('option', 'title', title);
+		}
+		$('#dialog').html(text);
+		$("#dialog").dialog("open");
+	}
+
 	return {
 		getInstance : getInstance,
 		tempCallbackArray : tempCallbackArray,
@@ -485,7 +497,8 @@ var Robot = (function() {
 		accCallbackArray : accCallbackArray,
 		callbackHandler : callbackHandler,
 		errorArray : errorArray,
-		urlPrefix : urlPrefix
+		urlPrefix : urlPrefix,
+		alert : alert
 	};
 })();
 
@@ -529,7 +542,7 @@ $(document).ready(function() {
 			if (Robot.accCallbackArray.length > 0) {
 				Robot.callbackHandler(Robot.accCallbackArray, true);
 			}
-		} else if(Robot.accCallbackArray.length > 0){
+		} else if (Robot.accCallbackArray.length > 0) {
 			Robot.callbackHandler(Robot.accCallbackArray);
 		}
 		Robot.iFrameIsLoading = false;
