@@ -73,39 +73,45 @@ $(document).ready(function() {
 
 		$("#metaStartButton").click(function() {
 			var $metaTestNameLoad = $("#metaTestNameLoad").val();
-			if (localStorage.getItem($metaTestNameLoad)) {
-				var localAccArray = JSON.parse(localStorage.getItem($metaTestNameLoad));
+			if ($metaTestNameLoad == "") {
+				window.alert("Warning! Empty string for demo name! (maybe you didn't fill the right input in MetaTest box?)")
+			} else {
+				if (localStorage.getItem($metaTestNameLoad)) {
+					var localAccArray = JSON.parse(localStorage.getItem($metaTestNameLoad));
 
-				recCall(localAccArray);
+					recCall(localAccArray);
 
-				function recCall(arr) {
-					if (arr.length > 0) {
-						var elem = arr[0];
-						if (elem.type == "mouseMove") {
-							console.log(Robot.urlPrefix + 'mouseMoveSimpleMeta=' + JSON.stringify(elem));
-							$.post(Robot.urlPrefix + 'mouseMoveSimpleMeta=' + JSON.stringify(elem), function(response) {
-								console.log(response);
-								arr.shift();
-								recCall(arr);
-							});
-						} else if (elem.type == "click") {
-							$.post(Robot.urlPrefix + 'click=true', function(response) {
-								console.log(response);
-								arr.shift();
-								recCall(arr);
-							});
-						} else if (elem.type == "type") {
-							$.post(Robot.urlPrefix + 'type=' + escape(elem.text), function(response) {
-								console.log(response);
-								arr.shift();
-								recCall(arr);
-							});
+					function recCall(arr) {
+						if (arr.length > 0) {
+							var elem = arr[0];
+							if (elem.type == "mouseMove") {
+								console.log(Robot.urlPrefix + 'mouseMoveSimpleMeta=' + JSON.stringify(elem));
+								$.post(Robot.urlPrefix + 'mouseMoveSimpleMeta=' + JSON.stringify(elem), function(response) {
+									console.log(response);
+									arr.shift();
+									recCall(arr);
+								});
+							} else if (elem.type == "click") {
+								$.post(Robot.urlPrefix + 'click=true', function(response) {
+									console.log(response);
+									arr.shift();
+									recCall(arr);
+								});
+							} else if (elem.type == "type") {
+								var queryString = Robot.urlPrefix + 'type=' + escape(elem.text);
+								//var queryString = encodeURI(Robot.urlPrefix + 'type=' + elem.text);
+								$.post(queryString, function(response) {
+									console.log(response);
+									arr.shift();
+									recCall(arr);
+								});
+							}
 						}
 					}
-				}
 
-			} else {
-				Robot.alert("Coudn't find '" + $metaTestNameLoad + "' named localStorage element");
+				} else {
+					window.alert("Couldn't find '" + $metaTestNameLoad + "' named localStorage element");
+				}
 			}
 		});
 	}();

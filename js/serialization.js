@@ -386,6 +386,7 @@ var BPMModule = ( function() {
 		return {
 			BPMDeserialization : BPMDeserialization,
 			serializationModel : serializationModel,
-			prepareWorld : prepareWorld
+			prepareWorld : prepareWorld,
+			deserialize : deserialize
 		};
 	}());

@@ -106,7 +106,8 @@ var Robot = (function() {
 	}
 
 	function type(text, callbackArray) {
-		$.post(urlPrefix + 'type=' + text, function(response) {
+		var queryString = urlPrefix + 'type=' + text;
+		$.post(queryString, function(response) {
 			console.log(response);
 			if (response == "type.OK") {
 				callbackArray.shift();
@@ -226,7 +227,7 @@ var Robot = (function() {
 			//cross-browser incompatibility
 			if (error.name == "SecurityError" && error.code == 18) {
 				callbackArray.length = 0;
-				Robot.alert("Cross-browser incompatibility: the page you want to test doesn't allow to get information outside from the page itself!", "Error");
+				window.alert("Cross-browser incompatibility: the page you want to test doesn't allow to get information outside from the page itself!", "Error");
 			}
 		}
 		if (callbackArray.length === 0) {
@@ -263,13 +264,15 @@ var Robot = (function() {
 	}
 
 	function testEnded() {
-		var endString = "Test ended!<br/>ERRORS:";
+		var endString = "Test ended!";
 		if (errorArray.length > 0) {
+			endString += "\nERRORS: ";
 			errorArray.map(function(errorObj) {
-				endString += "<br/>" + "Type: " + errorObj.type + ", message: " + errorObj.text;
+				endString += "\n" + "Type: " + errorObj.type + ", message: " + errorObj.text;
 			});
 		}
-		Robot.alert(endString, "Test ended");
+		//Robot.alert(endString, "Test ended");
+		window.alert(endString, "Test ended");
 	}
 
 	function initializeRobot() {
@@ -490,6 +493,39 @@ var Robot = (function() {
 		$("#dialog").dialog("open");
 	}
 
+	function synchIFramePositionWithServer() {
+		var x = 0;
+		var y = 0;
+		//var iFramePos = $("#testIFrame").position();
+		$(document.body).scrollTop(0);
+		$("#testIFrame").contents().find("body").mousemove(function(e) {
+			x = e.pageX;
+			y = e.pageY;
+			console.log(x, y);
+		});
+		$.post(Robot.urlPrefix + 'synchronizeOffsets={"x":' + 0 + ',"y":' + 0 + '}', function(response) {
+			//var xNewOffset = Math.abs(x - 400);
+			//var yNewOffset = Math.abs(y - 200);
+			var iFramePos = document.querySelector("#testIFrame").getBoundingClientRect();
+			console.log(response);
+			//INTERESTING
+			//NEEDS PREWRITTEN OFFSETS
+			x = x + iFramePos.left - 5;
+			y = y + iFramePos.top - 6;
+			if (response == "synch.step1.OK") {
+				$.post(Robot.urlPrefix + 'synchronizeOffsets={"x":' + x + ',"y":' + y + '}', function(response) {
+					$("#testIFrame").contents().find("body").unbind("mousemove");
+					response = JSON.parse(response);
+					console.log(response);
+					if (response.message == "synch.step2.OK") {
+						//Robot.alert("Successful position synchronization with server!", "Synch successful");
+						console.log("Successful position synchronization with server! New xOffset " + response.xOffset + ", yOffset: " + response.yOffset);
+					}
+				});
+			}
+		});
+	}
+
 	return {
 		getInstance : getInstance,
 		tempCallbackArray : tempCallbackArray,
@@ -498,7 +534,8 @@ var Robot = (function() {
 		callbackHandler : callbackHandler,
 		errorArray : errorArray,
 		urlPrefix : urlPrefix,
-		alert : alert
+		alert : alert,
+		synchIFramePositionWithServer : synchIFramePositionWithServer
 	};
 })();
 
@@ -520,7 +557,7 @@ $(document).ready(function() {
 	});
 
 	$("#deserializeButton").click(function() {
-		deserialize($("#deserializeTextArea").val(), world1, BPMModule.serializationModel);
+		BPMModule.deserialize($("#deserializeTextArea").val(), world1, BPMModule.serializationModel);
 	});
 
 	//detect if the iframe is loading:
@@ -551,6 +588,10 @@ $(document).ready(function() {
 
 	$("#iFrameChangeSrcBtn").click(function() {
 		$("#testIFrame").attr('src', $("#iFrameChangeSrcInput").val());
+	});
+
+	$("#synchButton").click(function() {
+		Robot.synchIFramePositionWithServer();
 	});
 
 	//I hate that popup when I want to navigate from the page. So I override it.
