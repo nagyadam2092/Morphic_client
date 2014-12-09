@@ -105,7 +105,7 @@ var RendererClass = (function($) {
 			// our newly created renderer will have its .init() method called shortly by sys...
 		}
 		world1.children[0].children.map(function(morph) {
-			var LocalBoxNode = sys.addNode("node#" + createLUID(), {
+			var LocalBoxNode = sys.addNode("node#" + BPMModule.createLUID(), {
 				boxmorph : morph
 			});
 			LocalBoxNode.data.boxmorph.setPosition(new Point(LocalBoxNode.p.x, LocalBoxNode.p.y));
